@@ -422,12 +422,12 @@ if __name__ == '__main__':
         return tf.math.rsqrt(self.d_model) * tf.math.minimum(arg1, arg2)
 
     # Load text for training
-    text = load_prideandprejudice(max_words=1000)
+    text = load_prideandprejudice(max_words=20000)
  
     seq_len = 10     #Length of the input sequence to the transformer
     vec_dim = 768    #Dimension of the embedding vectors
 
-    epochs = 2       #Number of epochs to train for
+    epochs = 5       #Number of epochs to train for
 
     # This loads both the tokeniser and the pretrained BERT embedding, for your own
     # embedding you will have separate tokeniser and embedding loaders.

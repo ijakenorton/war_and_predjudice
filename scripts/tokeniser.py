@@ -3,7 +3,8 @@ __organization__ = "COSC420, University of Otago"
 __email__ = "lech.szymanski@otago.ac.nz"
 
 import re
-import progressbar
+from tqdm import tqdm
+from progressbar import ProgressBar
 import os  
 import numpy as np
 import contextlib
@@ -222,7 +223,7 @@ class Tokeniser:
         k = len(word_index)
 
         if verbose:
-            prog = progressbar.ProgressBar(max_value=self.vocab_size)
+            prog = ProgressBar(max_value=self.vocab_size)
         else:
             prog = contextlib.suppress()
 
@@ -334,12 +335,13 @@ class Tokeniser:
                 ids.append(0)
 
         if verbose:
-            prog = progressbar.progressbar(range(len(self.merge)))
+            prog = tqdm(range(len(self.merge)))
         else:
             prog = range(len(self.merge))
 
+
         # Merge tokens that we have merge rules for in the BPE tokeniser
-        for m in prog:
+        for m in tqdm(prog):
             new_ids = []
             I = np.where(np.array(ids) == self.merge[m][0])[0]
             if len(I)==0:

@@ -1,0 +1,3 @@
+Training tokenizer on 500, 1000 5000
+
+Training the token to vec with hidden layers 128 256 512
