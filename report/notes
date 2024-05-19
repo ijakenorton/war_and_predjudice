@@ -1,3 +1,5 @@
 Training tokenizer on 500, 1000 5000
 
-Training the token to vec with hidden layers 128 256 512
+Training the token to vec with:
+# dimensions = [32, 64, 128, 256, 512]
+# context_windows = [1, 2, 3, 4, 10]
