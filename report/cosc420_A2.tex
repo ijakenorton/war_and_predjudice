@@ -1,5 +1,8 @@
 \documentclass[12pt]{article} \usepackage{COSC420style} \usepackage{soul}
 
+\usepackage{verbatim}
+\usepackage{graphicx}
+\usepackage{subcaption}
 \papercode{COSC420}
 
 \title{Transformer based language model}
@@ -60,12 +63,70 @@ I am happy in the end with the split of punctuation vs text, however quotations 
 that the model often struggles with. Additionally the models with context windows of 4 tended to
 have a nice evenish distribution, with some notable clustering with expected semantically similar
 words like "would, should , could, must, shall".
-[here is ctx window 1 as example dim_32_ctx_1_embedding.svg]
+% [here is ctx window 1 as example dim_32_ctx_1_embedding.svg]
 
-To find out the vocab size I calculated a rough count of unique words\footnote{tr '[:upper:]' '[:lower:]' < combined_books_text | tr -d '[:punct:]' | tr ' ' '\n' | sort
-| uniq | wc -l} over the whole corpus which
-gave me ~25000 words. From the eye test though there were many duplicates/ close duplicates in
-there, mainly due to punctuation for example..
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_32_ctx_1_embedding.pdf}
+		\caption{hidden layers: 32, context window of 1}
+		\label{fig:32_1}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_32_ctx_4_embedding.pdf}
+		\caption{hidden layers: 32, context window of 4}
+		\label{fig:32_4}
+	\end{subfigure}
+	\newline % starts a new line
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_64_ctx_3_embedding.pdf}
+		\caption{hidden layers: 64, context window of 3}
+		\label{fig:64_3}
+	\end{subfigure}
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_64_ctx_5_embedding.pdf}
+		\caption{hidden layers: 64, context window of 5}
+		\label{fig:64_5}
+	\end{subfigure}
+	\caption{t-SNE plots of embedding space with varying sizes of hidden layers and context
+		windows}
+	\label{fig:small_embeddings}
+\end{figure}
+
+\begin{figure}[htbp]
+	\centering
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_64_ctx_4_embedding.pdf}
+		\caption{hidden layers: 64, context window: 4}
+		\label{fig:64_4}
+	\end{subfigure}
+	\hfill % Add horizontal space between the first and second subfigures on the same row
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_128_ctx_4_embedding.pdf}
+		\caption{hidden layers: 128, context window: 4}
+		\label{fig:128_4}
+	\end{subfigure}
+	\newline % Starts a new line for the next row: subfigures
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_256_ctx_4_embedding.pdf}
+		\caption{hidden layers: 256, context window: 4}
+		\label{fig:256_4}
+	\end{subfigure}
+	\hfill % Add horizontal space between the first and second subfigures on the same row
+	\begin{subfigure}[b]{0.45\textwidth}
+		\includegraphics[width=\textwidth]{./figures/dim_512_ctx_4_embedding.pdf}
+		\caption{hidden layers: 512, context window: 4}
+		\label{fig:512_4}
+	\end{subfigure}
+	\caption{t-SNE plots of embedding space with varying sizes of hidden layers and context windows}
+	\label{fig:larger_embeddings}
+\end{figure}
+
+To find out the vocab size I calculated a rough count of unique words\footnote{bash command:
+\texttt{tr '[:upper:]' '[:lower:]' < combined\_books\_text | tr -d '[:punct:]' | tr ' '
+'\textbackslash{}n' | sort | uniq | wc -l}} over the whole corpus which gave me approximately 25,000
+words. From the eye test, though, there were many duplicates/close duplicates in there, mainly due
+to punctuation, for example.
 
 \begin{itemize}
 	\item   ‘your
@@ -73,7 +134,6 @@ there, mainly due to punctuation for example..
 	\item   your
 	\item   “you’re
 	\item   you’re
-	\item   “yours
 \end{itemize}
 
 To capture as much as I could I went up to 5000 tokens which was the limit due to memory and model
@@ -81,9 +141,11 @@ size concerns at higher token counts. Additionally, if chatgpt can manage with o
 tokens, 10\% for a corpus of this size seems reasonable to me.
 
 I tested a range of values for the the hidden layer dimension, from 32 up to 512. From my findings
-again with limited testing it was hard to qualitatively decide which would be the best to continue
-with. For sure I could tell that 32 and 64 were not enough as there was a heavy sway present in the
-graphs output from all of these dimensions, showing a lack of stabilitiy across the whole dataset.
+again with limited testing it was hard to quantitatively decide which would be the best to continue
+with. For sure I could tell that 32 and 64 were not enough as there was a heavy skew present in the
+graphs output from all of these dimensions. Due to how t-SNE squishes the dimensionality, I am not
+sure that having a linear skew is necessarily a bad thing, however my interpretation was that the
+skewness represented a simpler embedding representation.
 
 I chose to go with the middle of the good values again.
 

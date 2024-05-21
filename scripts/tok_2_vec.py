@@ -115,8 +115,8 @@ def load_encoding(context, path, tokeniser):
 
 def fit_skipgram(context_indices, retrain=False):
     if (
-        os.path.isfile(path_utils.embedding_path(context))
-        and os.path.isfile(path_utils.vec_model_path(context))
+        os.path.isfile(path_utils.embedding(context))
+        and os.path.isfile(path_utils.vec_model(context))
         and not retrain
     ):
         return
@@ -140,27 +140,27 @@ def fit_skipgram(context_indices, retrain=False):
 
     embedding_weights = list(model.layers)[1].get_weights()[0]
     np.save(
-        path_utils.embedding_path(context),
+        path_utils.embedding(context),
         embedding_weights,
     )
 
     history = train_info.history
     with gzip.open(
-        path_utils.history_path(
+        path_utils.history(
             context,
         ),
         "w",
     ) as f:
         pickle.dump(history, f)
 
-    model.save_weights(path_utils.vec_model_path(context))
+    model.save_weights(path_utils.vec_model(context))
 
 
 def predict_n_words(target, n=10):
-    tokeniser = tokenise(path_utils.tokeniser_path(context))
+    tokeniser = tokenise(path_utils.tokeniser(context))
     model = one_hot_skipgram_model(context)
-    print(f"loading model from {path_utils.vec_model_path(context)}...")
-    model.load_weights(path_utils.vec_model_path(context))
+    print(f"loading model from {path_utils.vec_model(context)}...")
+    model.load_weights(path_utils.vec_model(context))
 
     target_index = tokeniser.encode(target)
     print(f"target: {target}")
@@ -180,21 +180,21 @@ def predict_n_words(target, n=10):
 def main():
     global context
 
-    dimensions = [64, 128, 256, 512]
+    # dimensions = [64, 128, 256, 512]
+    dimensions = [32]
     context_windows = [3, 4, 5]
 
     context["EPOCHS"] = 2
 
-    tokeniser = tokenise(path_utils.tokeniser_path(context))
-    context_indices = load_encoding(
-        context, path_utils.encoding_path(context), tokeniser
-    )
-    for i, dim in enumerate(dimensions):
-        for j, ctx in enumerate(context_windows):
+    tokeniser = tokenise(path_utils.tokeniser(context))
+    context_indices = load_encoding(context, path_utils.encoding(context), tokeniser)
+    index = 1
+    for dim in dimensions:
+        for ctx in context_windows:
             context["DIMENSION"] = dim
             context["CONTEXT_WINDOW"] = ctx
             print(
-                f"|Current context| {i + 1 * j + 1} of {len(dimensions) * len(context_windows)}\n",
+                f"|Current context| {index} of {len(dimensions) * len(context_windows)}\n",
                 context,
             )
             fit_skipgram(context_indices, True)
