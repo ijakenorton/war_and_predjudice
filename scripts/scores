@@ -1,0 +1,59 @@
+
+'EPOCHS': 1, 'VOCAB_SIZE': 5000,'CONTEXT_WINDOW: 4, 'SEQ_LEN': 100, 'TEXT_TYPE': 'both'
+
+'NUM_HEADS': 4, 'NUM_LAYERS': 4, 'DFF': 256}
+ loss: 2.8427 - masked_accuracy: 0.4136
+
+'NUM_HEADS': 4, 'NUM_LAYERS': 4, 'DFF': 512}
+loss: 2.6718 - masked_accuracy: 0.4373
+
+'NUM_HEADS': 4, 'NUM_LAYERS': 6, 'DFF': 256}
+loss: 2.6647 - masked_accuracy: 0.4402
+
+'NUM_HEADS': 4, 'NUM_LAYERS': 6, 'DFF': 512}
+loss: 2.4718 - masked_accuracy: 0.4695
+
+
+
+'NUM_HEADS': 16, 'NUM_LAYERS': 4, 'DFF': 256}
+loss: 2.3300 - masked_accuracy: 0.4995
+
+'NUM_HEADS': 16, 'NUM_LAYERS': 4, 'DFF': 512}
+loss: 2.2095 - masked_accuracy: 0.5197
+
+'NUM_HEADS': 16, 'NUM_LAYERS': 6, 'DFF': 256}
+loss: 2.0522 - masked_accuracy: 0.5551
+
+'NUM_HEADS': 16, 'NUM_LAYERS': 6, 'DFF': 512}
+loss: 1.9590 - masked_accuracy: 0.5725
+
+
+One_hot
+{'NUM_HEADS': 4, 'NUM_LAYERS': 4, 'DFF': 256}
+loss: 2.2441 - masked_accuracy: 0.5154
+
+ {'NUM_HEADS': 4, 'NUM_LAYERS': 4, 'DFF': 512}
+loss: 2.1719 - masked_accuracy: 0.5289
+
+ {'NUM_HEADS': 4, 'NUM_LAYERS': 6, 'DFF': 256}
+loss: 2.0241 - masked_accuracy: 0.5586
+
+ {'NUM_HEADS': 4, 'NUM_LAYERS': 6, 'DFF': 512}
+loss: 1.9068 - masked_accuracy: 0.5823
+
+
+
+
+
+ {'NUM_HEADS': 16, 'NUM_LAYERS': 4, 'DFF': 256}
+loss: 1.6985 - masked_accuracy: 0.6311
+
+{'NUM_HEADS': 16, 'NUM_LAYERS': 4, 'DFF': 512}
+loss: 1.6726 - masked_accuracy: 0.6358
+
+ {'NUM_HEADS': 16, 'NUM_LAYERS': 6, 'DFF': 256}
+loss: 1.4977 - masked_accuracy: 0.6802
+
+ {'NUM_HEADS': 16, 'NUM_LAYERS': 6, 'DFF': 512}
+loss: 1.4662 - masked_accuracy: 0.6856
+

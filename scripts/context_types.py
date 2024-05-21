@@ -10,3 +10,4 @@ class ContextConfig(TypedDict):
     TEXT_TYPE: str
     NUM_HEADS: int
     NUM_LAYERS: int
+    DFF: int
