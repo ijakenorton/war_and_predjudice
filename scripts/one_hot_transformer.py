@@ -48,17 +48,28 @@ def one_hot_transformer():
     return model
 
 
-def one_hot_fit(ids, retrain=False):
+def one_hot_fit(ids, retrain=True):
 
     if os.path.isfile(path_utils.one_hot_model(context)) and not retrain:
         return
 
+    np.random.shuffle(ids)
+    split_size = int(0.8 * len(ids))
+
+    # Split the ids into training and validation sets
+    train_ids = ids[:split_size]
+    validation_ids = ids[split_size:]
     train_data = PredictTextDataGenerator(
-        ids=ids, seq_len=context["SEQ_LEN"], batch_size=32
+        ids=train_ids, seq_len=context["SEQ_LEN"], batch_size=32
     )
+    validation_data = PredictTextDataGenerator(
+        ids=validation_ids, seq_len=context["SEQ_LEN"], batch_size=32
+    )
+
     model = one_hot_transformer()
     train_info = model.fit(
         train_data,
+        validation_data=validation_data,
         epochs=context["EPOCHS"],
     )
 
@@ -112,6 +123,7 @@ def one_hot_predict(prompt):
 
 def main():
     global context
+
     war_and_peace = "You can love a person dear to you with a human love"
     # , but an enemy can only be loved with divine
     # love."
@@ -119,9 +131,12 @@ def main():
 
     new_prompt = "check the logs"
 
-    layers = [4, 6]
-    heads = [4, 16]
-    dffs = [256, 512]
+    # layers = [4, 6]
+    # heads = [4, 16]
+    # dffs = [256, 512]
+    layers = [6]
+    heads = [16]
+    dffs = [512]
     tokeniser = tok_2_vec.tokenise(path_utils.tokeniser(context))
     ids = tok_2_vec.load_encoding(context, path_utils.encoding(context), tokeniser)
     index = 1
@@ -154,6 +169,7 @@ def main():
 
         for match in matches.items():
             print(match)
+            print()
 
 
 if __name__ == "__main__":

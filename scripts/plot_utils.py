@@ -20,10 +20,12 @@ def plot_tok_history(context: ContextConfig):
     else:
         print("History file not found.")
         return  # Exit the function if the file does not exist
+    print(history)
 
     fh = plt.figure()
     ph = fh.add_subplot(111)
     ph.plot(history["loss"], label="Loss")
+    ph.plot(history["accuracy"], label="Accuracy")
     ph.set_xlabel("Epoch")
     ph.set_ylabel("Loss")
     ph.set_ylim(

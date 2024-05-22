@@ -184,7 +184,7 @@ def main():
     dimensions = [32]
     context_windows = [3, 4, 5]
 
-    context["EPOCHS"] = 2
+    context["EPOCHS"] = 5
 
     tokeniser = tokenise(path_utils.tokeniser(context))
     context_indices = load_encoding(context, path_utils.encoding(context), tokeniser)
@@ -197,10 +197,10 @@ def main():
                 f"|Current context| {index} of {len(dimensions) * len(context_windows)}\n",
                 context,
             )
-            fit_skipgram(context_indices, True)
-            plot_utils.plot_vec(context)
+            # fit_skipgram(context_indices, True)
+            # plot_utils.plot_vec(context)
             plot_utils.plot_tok_history(context)
-            predict_n_words("th", 20)
+            # predict_n_words("th", 20)
 
     # for i, dim in enumerate(dimensions):
     #     for j, ctx in enumerate(context_windows):

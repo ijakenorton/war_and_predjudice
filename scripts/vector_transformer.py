@@ -50,17 +50,26 @@ def embedded_transformer():
     return model
 
 
-def embedded_fit(ids, retrain=False):
+def embedded_fit(ids, retrain=True):
 
     if os.path.isfile(path_utils.embedding_model(context)) and not retrain:
         return
+    split_size = int(0.8 * len(ids))
 
+    # Split the ids into training and validation sets
+    train_ids = ids[:split_size]
+    validation_ids = ids[split_size:]
     train_data = PredictTextDataGenerator(
-        ids=ids, seq_len=context["SEQ_LEN"], batch_size=32
+        ids=train_ids, seq_len=context["SEQ_LEN"], batch_size=32
     )
+    validation_data = PredictTextDataGenerator(
+        ids=validation_ids, seq_len=context["SEQ_LEN"], batch_size=32
+    )
+
     model = embedded_transformer()
     train_info = model.fit(
         train_data,
+        validation_data=validation_data,
         epochs=context["EPOCHS"],
     )
 
@@ -123,6 +132,10 @@ def main():
     layers = [4, 6]
     heads = [4, 16]
     dffs = [256, 512]
+
+    layers = [6]
+    heads = [16]
+    dffs = [512]
     tokeniser = tok_2_vec.tokenise(path_utils.tokeniser(context))
     ids = tok_2_vec.load_encoding(context, path_utils.encoding(context), tokeniser)
     outputs = []
@@ -134,10 +147,12 @@ def main():
                 context["NUM_HEADS"] = head
                 context["NUM_LAYERS"] = layer
                 context["DFF"] = diff
+                context["EPOCHS"] = 5
                 print(
                     f"|Current context| {index} of {len(layers) * len(heads) * len(dffs)}\n",
                     context,
                 )
+                embedded_fit(ids)
                 index += 1
                 outputs.append({"context": context, "text": predict(war_and_peace)})
                 outputs.append(
