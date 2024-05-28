@@ -180,46 +180,17 @@ def predict_n_words(target, n=10):
 def main():
     global context
 
-    # dimensions = [64, 128, 256, 512]
-    dimensions = [32]
-    context_windows = [3, 4, 5]
-
-    context["EPOCHS"] = 5
+    dimensions = [256]
+    context_windows = [4]
 
     tokeniser = tokenise(path_utils.tokeniser(context))
     context_indices = load_encoding(context, path_utils.encoding(context), tokeniser)
-    index = 1
     for dim in dimensions:
         for ctx in context_windows:
             context["DIMENSION"] = dim
             context["CONTEXT_WINDOW"] = ctx
-            print(
-                f"|Current context| {index} of {len(dimensions) * len(context_windows)}\n",
-                context,
-            )
-            # fit_skipgram(context_indices, True)
-            # plot_utils.plot_vec(context)
-            plot_utils.plot_tok_history(context)
-            # predict_n_words("th", 20)
-
-    # for i, dim in enumerate(dimensions):
-    #     for j, ctx in enumerate(context_windows):
-    #         context["DIMENSION"] = dim
-    #         context["CONTEXT_WINDOW"] = ctx
-    #         print(
-    #             f"|Current context| {i * j} of {len(dimensions) * len(context_windows)}\n",
-    #             context,
-    #         )
-    #         fit_skipgram(context_indices)
-    #         plot_vec()
-    #         plot_history()
-    # vocab_size = context["VOCAB_SIZE"]
-
-    # # Create necessary folders
-    # if not os.path.isdir("../saved"):
-    #     os.mkdir("../saved")
-
-    # plot_vec()
+            fit_skipgram(context_indices, False)
+            predict_n_words("th", 20)
 
 
 if __name__ == "__main__":

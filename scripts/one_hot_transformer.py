@@ -53,7 +53,6 @@ def one_hot_fit(ids, retrain=True):
     if os.path.isfile(path_utils.one_hot_model(context)) and not retrain:
         return
 
-    np.random.shuffle(ids)
     split_size = int(0.8 * len(ids))
 
     # Split the ids into training and validation sets
@@ -128,15 +127,12 @@ def main():
     # , but an enemy can only be loved with divine
     # love."
     pride_and_predjudice = "It is a truth universally acknowledged"
-
     new_prompt = "check the logs"
 
-    # layers = [4, 6]
-    # heads = [4, 16]
-    # dffs = [256, 512]
     layers = [6]
     heads = [16]
     dffs = [512]
+    context["EPOCHS"] = 5
     tokeniser = tok_2_vec.tokenise(path_utils.tokeniser(context))
     ids = tok_2_vec.load_encoding(context, path_utils.encoding(context), tokeniser)
     index = 1
@@ -153,7 +149,7 @@ def main():
                     context,
                 )
                 index += 1
-                one_hot_fit(ids)
+                one_hot_fit(ids, retrain=False)
                 outputs.append(
                     {"context": context, "text": one_hot_predict(war_and_peace)}
                 )

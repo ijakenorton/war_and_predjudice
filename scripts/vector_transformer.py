@@ -129,10 +129,6 @@ def main():
     pride_and_predjudice = "It is a truth universally acknowledged"
     check_the_logs = "check the logs"
 
-    layers = [4, 6]
-    heads = [4, 16]
-    dffs = [256, 512]
-
     layers = [6]
     heads = [16]
     dffs = [512]
@@ -147,12 +143,11 @@ def main():
                 context["NUM_HEADS"] = head
                 context["NUM_LAYERS"] = layer
                 context["DFF"] = diff
-                context["EPOCHS"] = 5
                 print(
                     f"|Current context| {index} of {len(layers) * len(heads) * len(dffs)}\n",
                     context,
                 )
-                embedded_fit(ids)
+                embedded_fit(ids, retrain=False)
                 index += 1
                 outputs.append({"context": context, "text": predict(war_and_peace)})
                 outputs.append(
